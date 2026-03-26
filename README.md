@@ -2,26 +2,41 @@
 
 ### Prerequisites
 - [uv](https://docs.astral.sh) installed (Fast Python package manager).
-- OpenAI, Exa, and OpenWeather API Keys.
+- API keys for your selected LLM provider, Exa, and OpenWeather.
 
 ### Installation
 1. **Clone the repository**:
    ```bash
    git clone <https://github.com/Deljimae/agent>
    cd AGENTS
+   ```
 
 2. **env variables**:
 
-    OPENAI_API_KEY=your_key_here
+   ```env
+   # LLM Provider selection
+   LLM_PROVIDER=openai
+   LLM_MODEL=gpt-4o-mini
 
-    EXA_API_KEY=your_key_here
+   # Provider keys
+   OPENAI_API_KEY=your_openai_key_here
+   ANTHROPIC_API_KEY=your_anthropic_key_here
 
-    OPENWEATHER_API_KEY=your_key_here
+   # Tools
+   EXA_API_KEY=your_exa_key_here
+   OPENWEATHER_API_KEY=your_openweather_key_here
+   ```
+
+   Anthropic example:
+   ```env
+   LLM_PROVIDER=anthropic
+   LLM_MODEL=claude-3-5-sonnet-latest
+   ```
 
 3. **Run the Agent**
-    ```bash
-    uv run main.py
-
+   ```bash
+   uv run main.py
+   ```
 
 ## 🎯 Example Queries to Try
 

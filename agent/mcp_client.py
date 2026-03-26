@@ -1,11 +1,10 @@
-import asyncio
-from contextlib import AsyncExitStack 
+from contextlib import AsyncExitStack
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
+
 class LocalMCPClient:
     def __init__(self):
-        # Point this to your server file
         self.server_params = StdioServerParameters(
             command="uv",
             args=["run", "mcp_server/server.py"],
@@ -16,34 +15,31 @@ class LocalMCPClient:
     async def connect(self):
         """Connects to the local MCP server via stdio."""
         print("Connecting to Local-Intel MCP Server... 🔌")
-        self.exit_stack = AsyncExitStack() 
-        
-        # Start the server process
+        self.exit_stack = AsyncExitStack()
+
         read_stream, write_stream = await self.exit_stack.enter_async_context(
             stdio_client(self.server_params)
         )
-        
-        # Initialize the session
+
         self.session = await self.exit_stack.enter_async_context(
             ClientSession(read_stream, write_stream)
         )
         await self.session.initialize()
-        
-        # Discover tools
+
         response = await self.session.list_tools()
         return response.tools
 
-    def translate_to_openai(self, mcp_tools):
-        """Converts MCP tool definitions into OpenAI Function calling format."""
-        openai_tools = []
+    def to_generic_tool_defs(self, mcp_tools):
+        """Converts MCP tool definitions into provider-neutral tool schemas."""
+        generic_tools = []
         for tool in mcp_tools:
-            openai_tools.append({
+            generic_tools.append({
                 "type": "function",
                 "name": tool.name,
                 "description": tool.description,
                 "parameters": tool.inputSchema,
             })
-        return openai_tools
+        return generic_tools
 
     async def call_tool(self, name, arguments):
         """Executes a tool on the MCP server and returns the result."""
