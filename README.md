@@ -1,4 +1,4 @@
-# AGENTS
+# local-research-agent
 
 A small command-line research agent with provider adapters, local tools, MCP-based project inspection, lightweight skill selection, and an experimental memory layer.
 
