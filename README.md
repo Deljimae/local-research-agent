@@ -55,6 +55,8 @@ agent/               # agent loop, providers, memory, skills, MCP client
 tools/               # static tool registry and implementations
 skills/              # local skill instructions
 mcp_server/          # local FastMCP server
+experiments/         # exploratory notebooks kept outside runtime code
+examples/            # small saved outputs from previous local runs
 ```
 
 ## Example Prompts
@@ -82,5 +84,5 @@ Use the code-review skill to review agent/core.py.
 Offline syntax check:
 
 ```bash
-python -m compileall agent tools main.py config.py mcp_server/server.py mcp_server/main.py
+python -m compileall agent tools main.py config.py mcp_server/server.py
 ```
