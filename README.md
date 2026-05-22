@@ -55,8 +55,6 @@ agent/               # agent loop, providers, memory, skills, MCP client
 tools/               # static tool registry and implementations
 skills/              # local skill instructions
 mcp_server/          # local FastMCP server
-experiments/         # exploratory notebooks kept outside runtime code
-examples/            # small saved outputs from previous local runs
 ```
 
 ## Example Prompts
@@ -77,9 +75,7 @@ Use the code-review skill to review agent/core.py.
 
 - Tool calls run sequentially.
 - Memory retrieval is simple and local.
-- The MCP server exposes only a few project-focused tools.
 - Live behavior depends on valid OpenAI/Anthropic, Exa, and OpenWeather credentials.
-- There is no formal test suite yet.
 
 Offline syntax check:
 
