@@ -1,55 +1,86 @@
-## 🚀 Getting Started
+# AGENTS
 
-### Prerequisites
-- [uv](https://docs.astral.sh) installed (Fast Python package manager).
-- API keys for your selected LLM provider, Exa, and OpenWeather.
+A small command-line research agent with provider adapters, local tools, MCP-based project inspection, lightweight skill selection, and an experimental memory layer.
 
-### Installation
-1. **Clone the repository**:
-   ```bash
-   git clone <https://github.com/Deljimae/agent>
-   cd AGENTS
-   ```
+This is a local research/demo project, not a production assistant.
 
-2. **env variables**:
+## What Is Included
 
-   ```env
-   # LLM Provider selection
-   LLM_PROVIDER=openai
-   LLM_MODEL=gpt-4o-mini
+- OpenAI and Anthropic chat provider adapters
+- Built-in tools for Exa search and OpenWeather lookup
+- A local FastMCP server with project inspection and note-writing tools
+- Markdown-based skills loaded from `skills/`
+- SQLite-backed memory experiments using OpenAI embeddings
 
-   # Provider keys
-   OPENAI_API_KEY=your_openai_key_here
-   ANTHROPIC_API_KEY=your_anthropic_key_here
+## Setup
 
-   # Tools
-   EXA_API_KEY=your_exa_key_here
-   OPENWEATHER_API_KEY=your_openweather_key_here
-   ```
+Requirements:
 
-   Anthropic example:
-   ```env
-   LLM_PROVIDER=anthropic
-   LLM_MODEL=claude-3-5-sonnet-latest
-   ```
+- Python 3.10+
+- [uv](https://docs.astral.sh/uv/)
+- API keys for the provider/tools you plan to use
 
-3. **Run the Agent**
-   ```bash
-   uv run main.py
-   ```
+```bash
+git clone https://github.com/Deljimae/local-research-agent
+cd local-research-agent
+uv sync
+cp .env.example .env
+```
 
-## 🎯 Example Queries to Try
+Fill in `.env`. OpenAI is currently required for embeddings even when `LLM_PROVIDER=anthropic`.
 
-Once the agent is running, try these "stress tests" to see the MCP and Memory systems in action:
+```env
+LLM_PROVIDER=openai
+LLM_MODEL=gpt-4o-mini
+OPENAI_API_KEY=your_openai_key_here
+ANTHROPIC_API_KEY=your_anthropic_key_here
+EXA_API_KEY=your_exa_key_here
+OPENWEATHER_API_KEY=your_openweather_key_here
+```
 
-1. **The Directory Check (MCP Discovery)**:
-   > "List the files in my project to make sure you can see them."
-   *Tests: `inspect_project` tool and local server connectivity.*
+## Run
 
-2. **The Self-Awareness Test (Local Intelligence)**:
-   > "Read the code in agent/mcp_client.py and explain how you connect to the local server."
-   *Tests: `read_code_file` and the agent's ability to analyze its own architecture.*
+```bash
+uv run main.py
+```
 
-3. **The Multi-Tool Research (Full Orchestration)**:
-   > "Search Exa for the latest news on MCP servers, then save a summary of what you find to a new file called mcp_research.md."
-   *Tests: Cloud Search (Exa) + Reasoning + Local Write (MCP `write_research_log`) in one autonomous loop.*
+Type `exit` or `quit` to end the session.
+
+## Structure
+
+```text
+main.py              # CLI loop
+config.py            # environment config and SDK clients
+agent/               # agent loop, providers, memory, skills, MCP client
+tools/               # static tool registry and implementations
+skills/              # local skill instructions
+mcp_server/          # local FastMCP server
+```
+
+## Example Prompts
+
+```text
+List the files in my project to make sure you can see them.
+```
+
+```text
+Read agent/mcp_client.py and explain how it connects to the local server.
+```
+
+```text
+Use the code-review skill to review agent/core.py.
+```
+
+## Limitations
+
+- Tool calls run sequentially.
+- Memory retrieval is simple and local.
+- The MCP server exposes only a few project-focused tools.
+- Live behavior depends on valid OpenAI/Anthropic, Exa, and OpenWeather credentials.
+- There is no formal test suite yet.
+
+Offline syntax check:
+
+```bash
+python -m compileall agent tools main.py config.py mcp_server/server.py mcp_server/main.py
+```
